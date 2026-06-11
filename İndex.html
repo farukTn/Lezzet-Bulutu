@@ -1,0 +1,1650 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+  <title>Lezzet Bulutu • Video & Yemek Paylaşım Platformu</title>
+  
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://pagead2.googlesyndication.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; media-src 'self' blob:; font-src 'self' data:; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
+  
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  
+  <style>
+    :root {
+      --primary: #f15a24;
+      --primary-dark: #d94a1a;
+      --primary-light: #fef3e9;
+      --bg: #faf8f5;
+      --card: #ffffff;
+      --text: #1a1a1a;
+      --text-light: #6b6b6b;
+      --text-lighter: #999;
+      --border: #e8e4db;
+      --shadow-sm: 0 4px 12px rgba(0,0,0,0.04);
+      --shadow: 0 8px 32px rgba(0,0,0,0.06);
+      --shadow-lg: 0 20px 50px rgba(0,0,0,0.1);
+      --radius: 1.2rem;
+      --radius-lg: 1.8rem;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --gold: #d4a853;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    
+    body {
+      background: var(--bg);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    .creator-signature {
+      position: fixed;
+      bottom: 1.2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 30;
+      background: linear-gradient(135deg, rgba(26,26,26,0.9), rgba(40,40,40,0.9));
+      backdrop-filter: blur(20px);
+      color: var(--gold);
+      padding: 0.5rem 1.5rem;
+      border-radius: 3rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      border: 1px solid rgba(212,168,83,0.3);
+      pointer-events: none;
+      user-select: none;
+      animation: sigPulse 3s ease-in-out infinite;
+    }
+    @keyframes sigPulse {
+      0%,100%{box-shadow:0 8px 32px rgba(212,168,83,0.2)}
+      50%{box-shadow:0 8px 40px rgba(212,168,83,0.4)}
+    }
+    .creator-signature .name{background:linear-gradient(135deg,#d4a853,#f0d78c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:800}
+
+    /* HEADER */
+    .header {
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      padding: 0.6rem 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .logo{font-size:1.2rem;font-weight:800;background:linear-gradient(135deg,#f15a24,#e8934f);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;cursor:pointer;display:flex;align-items:center;gap:0.3rem}
+    .header-actions{display:flex;align-items:center;gap:0.2rem}
+    .user-chip{display:flex;align-items:center;gap:0.4rem;background:#f5f2eb;padding:0.3rem 0.7rem 0.3rem 0.3rem;border-radius:2rem;cursor:pointer;transition:var(--transition);border:1px solid transparent}
+    .user-chip:hover{background:#ede8de;border-color:var(--border)}
+    .user-chip-avatar{width:2rem;height:2rem;border-radius:50%;object-fit:cover;flex-shrink:0}
+    .user-chip-avatar.no-photo{background:linear-gradient(135deg,#f15a24,#e8934f);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem}
+    .user-chip-name{font-weight:600;font-size:0.8rem;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+    /* BİLDİRİM İKONU */
+    .notification-bell {
+      position: relative;
+      cursor: pointer;
+    }
+    .notification-bell .badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      background: var(--danger);
+      color: white;
+      font-size: 0.55rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      display: none;
+    }
+    .notification-bell .badge.show { display: flex; }
+
+    /* TAB BAR */
+    .tab-bar {
+      display: flex;
+      gap: 0;
+      background: white;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 53px;
+      z-index: 49;
+      padding: 0 1rem;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 0.7rem 0.5rem;
+      border: none;
+      background: none;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-lighter);
+      cursor: pointer;
+      transition: var(--transition);
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+    .tab-btn .badge {
+      background: var(--danger);
+      color: white;
+      font-size: 0.6rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 1rem;
+      font-weight: 700;
+    }
+
+    /* BUTTONS */
+    .btn {
+      background: var(--primary);
+      color: white;
+      padding: 0.6rem 1.3rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      font-size: 0.85rem;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(241,90,36,0.2);
+    }
+    .btn:hover { background: var(--primary-dark); transform: translateY(-1px); }
+    .btn:active { transform: scale(0.97); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+    .btn-outline { background: white; color: var(--text); border: 1.5px solid var(--border); box-shadow: none; }
+    .btn-outline:hover { background: #f9f6f0; }
+    .btn-sm { padding: 0.4rem 0.9rem; font-size: 0.75rem; }
+    .btn-ghost {
+      background: transparent; border: none; box-shadow: none; color: var(--text);
+      padding: 0.5rem; border-radius: 50%; width: 2.5rem; height: 2.5rem;
+      display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer;
+    }
+    .btn-ghost:hover { background: #f0ede6; }
+    .btn-danger { background: #ef4444; }
+    .btn-success { background: #10b981; }
+    .follow-btn {
+      background: var(--primary);
+      color: white;
+      padding: 0.4rem 1rem;
+      border-radius: 1.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .follow-btn.following { background: #e8e4db; color: var(--text); }
+    .follow-btn:hover { opacity: 0.9; }
+
+    /* ANA İÇERİK */
+    .main-container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0.8rem 0.8rem 7rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    /* GOOGLE AD BANNER */
+    .ad-banner {
+      background: #f9f6f0;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-lighter);
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* REELS GRID */
+    .reels-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    .reel-item {
+      aspect-ratio: 9/16;
+      background: #000;
+      cursor: pointer;
+      overflow: hidden;
+      position: relative;
+      border-radius: 0.3rem;
+      transition: var(--transition);
+    }
+    .reel-item:hover { transform: scale(1.02); z-index: 2; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+    .reel-item video { width: 100%; height: 100%; object-fit: cover; }
+    .reel-item .reel-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 0.5rem;
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+      color: white;
+    }
+    .reel-item .reel-title { font-size: 0.7rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .reel-item .reel-stats { font-size: 0.6rem; display: flex; gap: 0.5rem; align-items: center; }
+    .reel-item .play-icon {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      font-size: 2rem; color: white; opacity: 0.8; pointer-events: none;
+    }
+
+    /* FİLTRELER */
+    .filter-scroll {
+      display: flex; gap: 0.3rem; overflow-x: auto;
+      padding: 0.2rem 0; scrollbar-width: none;
+    }
+    .filter-scroll::-webkit-scrollbar { display: none; }
+    .filter-chip {
+      background: white; padding: 0.4rem 0.9rem; border-radius: 2rem;
+      white-space: nowrap; font-size: 0.75rem; font-weight: 500;
+      cursor: pointer; transition: var(--transition); border: 1.5px solid var(--border);
+      flex-shrink: 0; user-select: none;
+    }
+    .filter-chip:hover { background: #f9f6f0; }
+    .filter-chip.active { background: #1a1a1a; color: white; border-color: #1a1a1a; }
+
+    /* FEED */
+    .feed { display: flex; flex-direction: column; gap: 1.2rem; }
+    
+    .post-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(0,0,0,0.04);
+      transition: var(--transition);
+    }
+    .post-card:hover { box-shadow: var(--shadow-lg); }
+    
+    .post-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.7rem 0.8rem;
+      cursor: pointer;
+    }
+    .post-avatar {
+      width: 2.2rem; height: 2.2rem;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .post-avatar.no-photo {
+      background: linear-gradient(135deg, #f15a24, #e8934f);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    .post-user-info { flex:1; min-width:0; }
+    .post-username { font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 0.3rem; }
+    .post-date { font-size: 0.65rem; color: var(--text-lighter); }
+    
+    .post-media {
+      position: relative;
+      width: 100%;
+      background: #f0ede6;
+      cursor: pointer;
+      min-height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .post-media img, .post-media video {
+      width: 100%;
+      max-height: 450px;
+      object-fit: cover;
+      display: block;
+    }
+    .post-media video { background: #000; object-fit: cover; max-height: 500px; }
+    .post-media .no-media { font-size: 3rem; color: #ccc; }
+    
+    .post-body { padding: 0.7rem 0.8rem; display: flex; flex-direction: column; gap: 0.3rem; }
+    .post-category {
+      font-size: 0.65rem; color: var(--primary); font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .post-title { font-size: 1rem; font-weight: 700; }
+    .post-desc {
+      font-size: 0.85rem; color: var(--text-light); line-height: 1.4;
+      white-space: pre-line; word-break: break-word;
+    }
+    
+    /* AKSİYON BUTONLARI */
+    .post-actions {
+      display: flex; 
+      align-items: center; 
+      justify-content: space-around;
+      padding: 0.6rem 0.5rem; 
+      border-top: 1px solid #f5f2eb;
+      gap: 0.3rem;
+    }
+    .action-btn {
+      display: flex; 
+      align-items: center; 
+      gap: 0.4rem;
+      padding: 0.6rem 1.2rem; 
+      border-radius: 2rem;
+      font-size: 1rem; 
+      cursor: pointer; 
+      transition: var(--transition);
+      border: none; 
+      background: #f9f6f0; 
+      font-family: inherit; 
+      color: var(--text);
+      font-weight: 600;
+      flex: 1;
+      justify-content: center;
+      max-width: 200px;
+    }
+    .action-btn:hover { background: #f0ede6; transform: scale(1.03); }
+    .action-btn.liked { background: #fef2f2; color: #e63946; }
+    .action-btn.favorited { background: #fffbeb; color: #f59e0b; }
+    .action-btn .count { font-size: 0.85rem; }
+    
+    .post-owner-actions { display: flex; gap: 0.3rem; }
+    .post-owner-actions .action-btn { flex: none; max-width: none; padding: 0.5rem 0.8rem; font-size: 0.9rem; }
+
+    /* FAB */
+    .fab {
+      position: fixed; bottom: 5rem; right: 1.5rem;
+      width: 3.2rem; height: 3.2rem; border-radius: 50%;
+      background: linear-gradient(135deg, #f15a24, #e8934f);
+      color: white; font-size: 1.5rem; border: none; cursor: pointer;
+      box-shadow: 0 8px 30px rgba(241,90,36,0.35);
+      z-index: 40; transition: var(--transition);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .fab:hover { transform: scale(1.1); }
+
+    /* MODALLAR */
+    .modal-overlay {
+      position: fixed; top:0; left:0; width:100%; height:100%;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+      z-index: 80; display: flex; align-items: center; justify-content: center;
+      padding: 1rem; animation: fadeIn 0.2s;
+    }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    .modal {
+      background: white; border-radius: var(--radius-lg);
+      width: 100%; max-width: 600px; max-height: 90vh;
+      overflow-y: auto; box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+      animation: slideUp 0.3s; position: relative;
+    }
+    @keyframes slideUp { from{transform:translateY(30px);opacity:0} to{transform:translateY(0);opacity:1} }
+    .modal-close {
+      position: sticky; top: 0.8rem; float: right;
+      background: rgba(0,0,0,0.5); color: white; border: none;
+      width: 2rem; height: 2rem; border-radius: 50%;
+      font-size: 0.9rem; cursor: pointer; z-index: 5; margin-right: 0.8rem;
+    }
+    .modal-media { width:100%; background:#000; display:flex; align-items:center; justify-content:center; min-height:200px; }
+    .modal-media img, .modal-media video { width:100%; max-height:500px; object-fit:contain; }
+    .modal-body { padding: 1.5rem; display:flex; flex-direction:column; gap:0.6rem; clear:both; }
+
+    /* VİDEO DETAY MODAL */
+    .video-detail-overlay {
+      position: fixed; top:0; left:0; width:100%; height:100%;
+      background: #000; z-index: 90;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .video-detail-overlay video {
+      width: 100%; height: 100%; max-height: 100vh; object-fit: contain;
+    }
+    .video-detail-info {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 1.5rem;
+      background: linear-gradient(transparent, rgba(0,0,0,0.9));
+      color: white;
+      display: flex; flex-direction: column; gap: 0.8rem;
+    }
+    .video-detail-close {
+      position: absolute; top: 1rem; right: 1rem;
+      background: rgba(255,255,255,0.2); color: white;
+      border: none; width: 2.5rem; height: 2.5rem; border-radius: 50%;
+      font-size: 1.2rem; cursor: pointer; z-index: 5; backdrop-filter: blur(10px);
+    }
+    .video-detail-actions { display: flex; gap: 1rem; align-items: center; }
+    .video-detail-actions button {
+      background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);
+      color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 2rem;
+      font-size: 0.9rem; cursor: pointer; font-weight: 600;
+      display: flex; align-items: center; gap: 0.4rem; transition: all 0.2s;
+    }
+    .video-detail-actions button:hover { background: rgba(255,255,255,0.25); }
+    .video-detail-actions button.liked { background: rgba(239,68,68,0.5); }
+
+    /* BİLDİRİM PANELİ */
+    .notification-panel {
+      position: fixed;
+      right: 1rem;
+      top: 4rem;
+      width: 320px;
+      max-height: 400px;
+      overflow-y: auto;
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      z-index: 70;
+      padding: 0.5rem;
+      display: none;
+    }
+    .notification-panel.show { display: block; }
+    .notification-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.7rem;
+      border-radius: 0.8rem;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.8rem;
+    }
+    .notification-item:hover { background: #f9f6f0; }
+    .notification-item.unread { background: #fef3e9; }
+    .notification-item .notif-avatar {
+      width: 2rem; height: 2rem; border-radius: 50%;
+      background: linear-gradient(135deg, #f15a24, #e8934f);
+      color: white; display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.7rem; flex-shrink: 0;
+    }
+    .notification-item .notif-time { font-size: 0.65rem; color: var(--text-lighter); }
+
+    /* PROFİL */
+    .profile-header {
+      text-align: center; padding: 1.5rem;
+      background: linear-gradient(135deg, #fef3e9, #fef9f3);
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+    .profile-avatar-large {
+      width: 80px; height: 80px; border-radius: 50%; object-fit: cover;
+      border: 3px solid var(--primary); box-shadow: 0 4px 20px rgba(241,90,36,0.3); margin: 0 auto 0.6rem;
+    }
+    .profile-avatar-large.no-photo {
+      background: linear-gradient(135deg, #f15a24, #e8934f); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; font-weight: 700;
+    }
+    .profile-stats { display:flex; gap:1.5rem; justify-content:center; margin-top:0.6rem; }
+    .profile-stat { text-align:center; cursor: pointer; }
+    .profile-stat strong { font-size:1.2rem; color:var(--primary); display:block; }
+    .profile-stat span { font-size:0.7rem; color:var(--text-lighter); }
+    .profile-bio { color:var(--text-light); font-size:0.85rem; margin-top:0.3rem; white-space:pre-line; }
+    .profile-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 2px; padding: 2px;
+    }
+    .profile-grid-item {
+      aspect-ratio: 1; overflow: hidden; border-radius: 0.3rem;
+      cursor: pointer; background: #e8e4db;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .profile-grid-item img, .profile-grid-item video { width:100%; height:100%; object-fit:cover; }
+    .profile-photo-upload {
+      position: relative; width: 80px; height: 80px; margin: 0 auto 0.6rem; cursor: pointer;
+    }
+    .profile-photo-upload img {
+      width: 80px; height: 80px; border-radius: 50%; object-fit: cover;
+      border: 3px solid var(--primary);
+    }
+    .profile-photo-upload .upload-overlay {
+      position: absolute; bottom: 0; right: 0;
+      background: var(--primary); color: white;
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; border: 2px solid white;
+    }
+    .profile-photo-upload input { display: none; }
+
+    /* TAKİP LİSTESİ */
+    .follow-list {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .follow-list-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.7rem;
+      border-radius: 0.8rem;
+      transition: var(--transition);
+    }
+    .follow-list-item:hover { background: #f9f6f0; }
+
+    .admin-panel-overlay {
+      position:fixed; top:0; left:0; width:100%; height:100%;
+      background:rgba(0,0,0,0.5); z-index:90;
+      display:flex; align-items:center; justify-content:center; padding:1rem;
+    }
+    .admin-panel {
+      background:white; border-radius:var(--radius-lg);
+      width:100%; max-width:500px; max-height:85vh; overflow-y:auto;
+      padding:1.5rem; display:flex; flex-direction:column; gap:0.8rem;
+    }
+    .user-list { max-height:200px; overflow-y:auto; }
+    .user-list-item {
+      display:flex; align-items:center; gap:0.6rem; padding:0.6rem;
+      border-radius:0.8rem; transition:var(--transition);
+    }
+    .user-list-item:hover { background:#f9f6f0; }
+    .online-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+
+    .toast {
+      position:fixed; bottom:5rem; left:50%; transform:translateX(-50%);
+      background:#1a1a1a; color:white; padding:0.7rem 1.3rem;
+      border-radius:2rem; font-weight:500; z-index:200;
+      animation:toastIn 0.3s; max-width:90%; text-align:center; font-size:0.85rem;
+    }
+    @keyframes toastIn { from{opacity:0;transform:translateX(-50%) translateY(20px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
+
+    .empty-state { text-align:center; padding:2rem 1rem; color:var(--text-lighter); }
+    .empty-state .icon { font-size:4rem; }
+
+    .welcome-overlay {
+      position: fixed; top:0; left:0; width:100%; height:100%;
+      background: linear-gradient(135deg, #fef9f3 0%, #f5f0e8 50%, #fef5f0 100%);
+      z-index: 100; display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 1rem; padding: 1.5rem; overflow-y: auto;
+    }
+    .welcome-card {
+      background: white; border-radius: var(--radius-lg); padding: 2rem 1.5rem;
+      box-shadow: var(--shadow-lg); max-width: 420px; width: 100%;
+      text-align: center; display: flex; flex-direction: column; gap: 1rem;
+    }
+    .welcome-card h2 { font-size: 1.3rem; }
+    .welcome-card input, .welcome-card textarea {
+      width: 100%; padding: 0.8rem 1rem; border-radius: 1.5rem;
+      border: 2px solid var(--border); font-family: inherit; font-size: 0.9rem;
+      outline: none; transition: var(--transition); resize: vertical;
+    }
+    .welcome-card input:focus, .welcome-card textarea:focus {
+      border-color: var(--primary); box-shadow: 0 0 0 3px rgba(241,90,36,0.08);
+    }
+    .password-strength { height: 4px; border-radius: 2px; background: #e8e4db; margin-top: -0.5rem; overflow: hidden; }
+    .password-strength-bar { height: 100%; border-radius: 2px; transition: all 0.3s; width: 0%; }
+    .checkbox-row { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--text-light); justify-content: center; }
+    .checkbox-row input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--primary); }
+
+    .security-banner {
+      background: var(--warning); color: #1a1a1a; padding: 0.6rem 1rem;
+      text-align: center; font-size: 0.8rem; font-weight: 600; display: none;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+    }
+    .security-banner.show { display: flex; align-items: center; justify-content: center; gap: 0.4rem; }
+
+    .twofa-overlay {
+      position: fixed; top:0; left:0; width:100%; height:100%;
+      background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+      z-index: 120; display: flex; align-items: center; justify-content: center; padding: 1rem;
+    }
+    .twofa-card {
+      background: white; border-radius: var(--radius-lg); padding: 1.5rem;
+      max-width: 350px; width: 100%; text-align: center;
+    }
+    .twofa-input {
+      width: 100%; padding: 0.7rem 0.8rem; border-radius: 1rem;
+      border: 2px solid var(--border); font-size: 1.3rem;
+      text-align: center; letter-spacing: 0.4rem;
+      font-family: 'Courier New', monospace; outline: none;
+    }
+    .twofa-input:focus { border-color: var(--primary); }
+
+    @media (max-width:500px) {
+      .header { padding:0.5rem 0.7rem; }
+      .main-container { padding:0.5rem 0.5rem 7rem; }
+      .profile-grid { grid-template-columns: repeat(2, 1fr); }
+      .reels-grid { grid-template-columns: repeat(2, 1fr); }
+      .fab { bottom:4.5rem; right:1rem; width:2.8rem; height:2.8rem; font-size:1.3rem; }
+      .welcome-card { padding: 1.5rem 1.2rem; }
+      .tab-btn { font-size: 0.75rem; padding: 0.6rem 0.3rem; }
+      .notification-panel { width: 280px; right: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="creator-signature">⚡ Yapımcı: <span class="name">Faruk Tn</span> ⚡</div>
+<div class="security-banner" id="securityBanner"><span id="securityBannerIcon">⚠️</span> <span id="securityBannerMsg"></span></div>
+
+<!-- 2FA -->
+<div class="twofa-overlay" id="twofaOverlay" style="display:none;">
+  <div class="twofa-card">
+    <div style="font-size:2.5rem;margin-bottom:0.5rem;">🔐</div>
+    <h3>İki Faktörlü Doğrulama</h3>
+    <p style="color:var(--text-light);margin:0.3rem 0 0.8rem;font-size:0.85rem;">6 haneli kodu girin</p>
+    <input type="text" id="twofaCode" class="twofa-input" maxlength="6" placeholder="000000" autocomplete="off" inputmode="numeric">
+    <p style="color:var(--text-lighter);font-size:0.75rem;margin-top:0.4rem;">Kod: <strong id="twofaCodeDisplay">------</strong></p>
+    <p style="color:var(--text-lighter);font-size:0.75rem;" id="twofaCountdown">Süre: 05:00</p>
+    <div style="display:flex;gap:0.4rem;margin-top:0.8rem;">
+      <button class="btn btn-outline btn-sm" id="twofaResend" style="flex:1;">🔄 Yeni</button>
+      <button class="btn btn-sm" id="twofaVerify" style="flex:1;">✅ Doğrula</button>
+    </div>
+    <button class="btn btn-ghost" id="twofaCancel" style="margin-top:0.3rem;color:var(--danger);font-size:0.8rem;">İptal</button>
+  </div>
+</div>
+
+<!-- WELCOME -->
+<div class="welcome-overlay" id="welcomeScreen">
+  <div class="welcome-card">
+    <div class="profile-photo-upload" id="welcomePhotoUpload">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ccircle cx='40' cy='40' r='40' fill='%23f15a24'/%3E%3Ctext x='40' y='50' text-anchor='middle' fill='white' font-size='35'%3E👤%3C/text%3E%3C/svg%3E" id="welcomePhotoPreview" alt="Profil">
+      <div class="upload-overlay">📷</div>
+      <input type="file" id="welcomePhotoInput" accept="image/jpeg,image/png,image/webp">
+    </div>
+    <h2>🍽️ Lezzet Bulutu</h2>
+    <p style="font-size:0.85rem;">Video & Yemek Paylaşım Platformu</p>
+    <input type="text" id="welcomeName" placeholder="👤 Kullanıcı adınız" maxlength="25" autocomplete="username">
+    <input type="password" id="welcomePassword" placeholder="🔒 Şifreniz (min 8 karakter)" autocomplete="new-password">
+    <div class="password-strength"><div class="password-strength-bar" id="passwordStrengthBar"></div></div>
+    <textarea id="welcomeBio" placeholder="📝 Biyografi (opsiyonel)" maxlength="150" rows="2"></textarea>
+    <div class="checkbox-row">
+      <input type="checkbox" id="welcome2FA">
+      <label for="welcome2FA">🔐 İki faktörlü doğrulama</label>
+    </div>
+    <button class="btn" id="welcomeBtn" style="width:100%;padding:0.8rem;">🚀 Güvenli Giriş</button>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="header" id="header" style="display:none;">
+  <div class="logo" id="logoBtn"><span>🍽️</span><span>Lezzet Bulutu</span></div>
+  <div class="header-actions">
+    <button class="btn-ghost" id="searchToggle" title="Ara">🔍</button>
+    <div class="notification-bell" id="notificationBell" title="Bildirimler">
+      🔔<span class="badge" id="notificationBadge">0</span>
+    </div>
+    <div class="user-chip" id="userChip">
+      <div id="headerAvatarContainer"></div>
+      <span class="user-chip-name" id="headerName">Kullanıcı</span>
+    </div>
+    <button class="btn-ghost" id="menuToggle" title="Menü">☰</button>
+    <div id="menuDropdown" style="display:none;position:absolute;right:0.3rem;top:100%;background:white;border-radius:1rem;box-shadow:var(--shadow-lg);min-width:170px;z-index:60;border:1px solid var(--border);overflow:hidden;">
+      <button class="action-btn" id="menuProfile" style="width:100%;padding:0.7rem 1rem;border-radius:0;justify-content:flex-start;">👤 Profilim</button>
+      <button class="action-btn" id="menuEditProfile" style="width:100%;padding:0.7rem 1rem;border-radius:0;justify-content:flex-start;">✏️ Profili Düzenle</button>
+      <button class="action-btn" id="menuShare" style="width:100%;padding:0.7rem 1rem;border-radius:0;justify-content:flex-start;">➕ Tarif Paylaş</button>
+      <hr style="border:none;border-top:1px solid var(--border);margin:0;">
+      <button class="action-btn" id="menuAdmin" style="width:100%;padding:0.7rem 1rem;border-radius:0;justify-content:flex-start;display:none;" id="adminMenuBtn">🔐 Admin Panel</button>
+      <button class="action-btn" id="menuLogout" style="width:100%;padding:0.7rem 1rem;border-radius:0;justify-content:flex-start;color:#ef4444;">🚪 Çıkış</button>
+    </div>
+  </div>
+</header>
+
+<!-- BİLDİRİM PANELİ -->
+<div class="notification-panel" id="notificationPanel">
+  <h4 style="padding:0.5rem;font-size:0.9rem;">🔔 Bildirimler</h4>
+  <div id="notificationList"></div>
+</div>
+
+<!-- SEARCH -->
+<div id="searchBar" style="display:none;padding:0.5rem 1rem;background:white;border-bottom:1px solid var(--border);">
+  <input type="text" id="searchInput" placeholder="🔍 Tarif, video veya kullanıcı ara..." style="width:100%;padding:0.6rem 1rem;border-radius:2rem;border:1.5px solid var(--border);font-size:0.9rem;outline:none;" autocomplete="off">
+</div>
+
+<!-- TAB BAR -->
+<div class="tab-bar" id="tabBar" style="display:none;">
+  <button class="tab-btn active" data-tab="all">🌿 Keşfet</button>
+  <button class="tab-btn" data-tab="following">👥 Takip</button>
+  <button class="tab-btn" data-tab="videos">🎬 Reels <span class="badge" id="videoBadge">0</span></button>
+  <button class="tab-btn" data-tab="popular">🔥 Popüler</button>
+</div>
+
+<!-- MAIN -->
+<div class="main-container" id="mainContent" style="display:none;">
+  <!-- Google Ad Banner -->
+  <div class="ad-banner" id="adBanner1">
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    <span style="font-size:0.7rem;">Reklam</span>
+  </div>
+  
+  <div class="filter-scroll" id="filterBar">
+    <div class="filter-chip active" data-cat="all">🌿 Tümü</div>
+    <div class="filter-chip" data-cat="Ana Yemek">🍲 Ana Yemek</div>
+    <div class="filter-chip" data-cat="Tatlı">🍰 Tatlı</div>
+    <div class="filter-chip" data-cat="Meze">🥗 Meze</div>
+    <div class="filter-chip" data-cat="Salata">🥬 Salata</div>
+    <div class="filter-chip" data-cat="Kahvaltı">🥐 Kahvaltı</div>
+    <div class="filter-chip" data-cat="Çorba">🥣 Çorba</div>
+    <div class="filter-chip" data-cat="Hamur İşi">🥟 Hamur İşi</div>
+    <div class="filter-chip" data-cat="İçecek">🥤 İçecek</div>
+    <div class="filter-chip" data-cat="Sokak Lezzeti">🌮 Sokak</div>
+    <div class="filter-chip" data-cat="Diyet">🥗 Diyet</div>
+  </div>
+  <div id="feedArea"></div>
+  
+  <!-- Google Ad Banner 2 -->
+  <div class="ad-banner" id="adBanner2">
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="0987654321" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    <span style="font-size:0.7rem;">Reklam</span>
+  </div>
+</div>
+
+<!-- FAB -->
+<button class="fab" id="fabBtn" style="display:none;" title="Paylaş">+</button>
+
+<!-- DETAY MODAL -->
+<div id="detailModal" class="modal-overlay" style="display:none;">
+  <div class="modal">
+    <button class="modal-close" id="closeDetail">✕</button>
+    <div class="modal-media" id="detailMedia"></div>
+    <div class="modal-body">
+      <span class="post-category" id="detailCategory"></span>
+      <h2 id="detailTitle"></h2>
+      <p id="detailDesc" style="white-space:pre-line;color:var(--text-light);"></p>
+      <div class="post-actions" style="border-top:1px solid #f5f2eb;padding-top:0.6rem;">
+        <button class="action-btn" id="detailLike">🤍 0</button>
+        <button class="action-btn" id="detailFav">☆ Favorile</button>
+        <div class="post-owner-actions" id="detailOwnerActions"></div>
+      </div>
+      <div class="post-header" id="detailAuthor" style="padding:0;cursor:pointer;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- VİDEO DETAY MODAL -->
+<div id="videoDetailOverlay" class="video-detail-overlay" style="display:none;">
+  <button class="video-detail-close" id="closeVideoDetail">✕</button>
+  <video id="videoDetailPlayer" controls autoplay loop playsinline></video>
+  <div class="video-detail-info">
+    <h3 id="videoDetailTitle" style="font-size:1rem;"></h3>
+    <p id="videoDetailAuthor" style="font-size:0.8rem;opacity:0.8;"></p>
+    <div class="video-detail-actions">
+      <button id="videoDetailLike">🤍 <span>0</span></button>
+      <button id="videoDetailFav">☆ Favorile</button>
+      <button id="videoDetailFollow" class="follow-btn">+ Takip Et</button>
+      <button id="videoDetailEdit" style="display:none;">✏️ Düzenle</button>
+      <button id="videoDetailDelete" style="display:none;color:#ef4444;">🗑️ Sil</button>
+    </div>
+  </div>
+</div>
+
+<!-- SHARE MODAL -->
+<div id="shareModal" class="modal-overlay" style="display:none;">
+  <div class="modal"><button class="modal-close" id="closeShare">✕</button>
+    <div class="share-form">
+      <h3>📸 Tarif / Video Paylaş</h3>
+      <select id="shareCategory"><option value="">📂 Kategori seçin...</option><option>Ana Yemek</option><option>Tatlı</option><option>Meze</option><option>Salata</option><option>Kahvaltı</option><option>Çorba</option><option>Hamur İşi</option><option>İçecek</option><option>Sokak Lezzeti</option><option>Diyet</option></select>
+      <input type="text" id="shareName" placeholder="🍳 Yemek adı *" maxlength="80">
+      <textarea id="shareDesc" placeholder="📝 Tarif detayları..." maxlength="1000"></textarea>
+      <div class="upload-zone" id="shareUploadZone"><div style="font-size:2rem;">📁</div><p><strong>📷 Fotoğraf veya 🎬 Video Yükle</strong></p><p style="font-size:0.75rem;color:var(--text-light);">4K destek • Max 200MB</p><input type="file" id="shareMediaInput" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm"></div>
+      <div id="sharePreview" style="display:none;"><video id="sharePreviewVid" class="preview-thumb" controls style="display:none;"></video><img id="sharePreviewImg" class="preview-thumb" style="display:none;" alt="Önizleme"></div>
+      <div id="shareAnalysis" style="display:none;"></div>
+      <button class="btn" id="shareAnalyzeBtn" disabled style="width:100%;">🔍 Analiz Et</button>
+      <button class="btn btn-success" id="shareSubmitBtn" disabled style="width:100%;">💾 Paylaş</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROFİL MODAL -->
+<div id="profileModal" class="modal-overlay" style="display:none;">
+  <div class="modal"><button class="modal-close" id="closeProfile">✕</button>
+    <div class="profile-header">
+      <div id="profileAvatarContainer"></div>
+      <h3 id="profileName">Kullanıcı</h3>
+      <p class="profile-bio" id="profileBio"></p>
+      <div class="profile-stats">
+        <div class="profile-stat"><strong id="profilePostCount">0</strong><span>Tarif</span></div>
+        <div class="profile-stat" id="profileFollowersStat"><strong id="profileFollowersCount">0</strong><span>Takipçi</span></div>
+        <div class="profile-stat" id="profileFollowingStat"><strong id="profileFollowingCount">0</strong><span>Takip</span></div>
+        <div class="profile-stat"><strong id="profileLikeCount">0</strong><span>Beğeni</span></div>
+      </div>
+      <div style="display:flex;gap:0.5rem;justify-content:center;margin-top:0.6rem;">
+        <button class="follow-btn" id="profileFollowBtn" style="display:none;">+ Takip Et</button>
+        <button class="btn btn-outline btn-sm" id="profileEditBtn">✏️ Düzenle</button>
+      </div>
+    </div>
+    <div class="profile-grid" id="profileGrid"></div>
+    <div id="profileEmpty" class="empty-state" style="display:none;"><div class="icon">🍽️</div><p>Henüz paylaşım yok</p></div>
+  </div>
+</div>
+
+<!-- EDİT PROFİL -->
+<div id="editProfileModal" class="modal-overlay" style="display:none;">
+  <div class="modal"><button class="modal-close" id="closeEditProfile">✕</button>
+    <div class="share-form">
+      <h3>✏️ Profili Düzenle</h3>
+      <div class="profile-photo-upload" id="editPhotoUpload" style="margin-bottom:0.5rem;"><img src="" id="editPhotoPreview" alt="Profil" style="width:70px;height:70px;border-radius:50%;object-fit:cover;border:3px solid var(--primary);"><div class="upload-overlay">📷</div><input type="file" id="editPhotoInput" accept="image/jpeg,image/png,image/webp"></div>
+      <input type="text" id="editName" placeholder="Kullanıcı adı" maxlength="25">
+      <textarea id="editBio" placeholder="Biyografi" maxlength="150"></textarea>
+      <button class="btn" id="saveProfileBtn" style="width:100%;">💾 Kaydet</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMİN (SADECE FarukTn) -->
+<div id="adminOverlay" class="admin-panel-overlay" style="display:none;">
+  <div class="admin-panel">
+    <div style="display:flex;justify-content:space-between;align-items:center;"><h3>🔐 Admin Panel - Faruk Tn</h3><button class="btn-ghost" id="closeAdmin">✕</button></div>
+    <div id="adminContent" style="display:flex;flex-direction:column;gap:0.8rem;">
+      <p style="color:#10b981;">✅ Hoş geldin Faruk Tn</p>
+      <div style="display:flex;gap:0.6rem;flex-wrap:wrap;">
+        <div style="flex:1;background:#f9f6f0;padding:0.8rem;border-radius:1rem;text-align:center;"><strong style="font-size:1.3rem;color:var(--primary);" id="adminTotalUsers">0</strong><p style="font-size:0.7rem;">Kullanıcı</p></div>
+        <div style="flex:1;background:#f9f6f0;padding:0.8rem;border-radius:1rem;text-align:center;"><strong style="font-size:1.3rem;color:var(--primary);" id="adminTotalPosts">0</strong><p style="font-size:0.7rem;">Tarif</p></div>
+        <div style="flex:1;background:#f9f6f0;padding:0.8rem;border-radius:1rem;text-align:center;"><strong style="font-size:1.3rem;color:#10b981;" id="adminActiveNow">0</strong><p style="font-size:0.7rem;">Aktif</p></div>
+      </div>
+      <h4>👥 Kullanıcılar</h4>
+      <div class="user-list" id="adminUserList"></div>
+      <button class="btn btn-danger btn-sm" id="adminClearAll" style="width:100%;">🗑️ Tüm Tarifleri Sil</button>
+    </div>
+  </div>
+</div>
+
+<!-- TAKİP LİSTESİ MODAL -->
+<div id="followListModal" class="modal-overlay" style="display:none;">
+  <div class="modal"><button class="modal-close" id="closeFollowList">✕</button>
+    <div style="padding:1.5rem;">
+      <h3 id="followListTitle">Takipçiler</h3>
+      <div class="follow-list" id="followListContent"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ============ ÖZEL ADMİN ============
+  const SUPER_ADMIN = { username: 'FarukTn', password: 'FarukTn47-21F' };
+  const CONFIG = { STORAGE_KEY: 'lb_ultimate_data' };
+  
+  let DATA = { 
+    recipes: [], users: {}, currentUser: null, 
+    likes: {}, favs: {}, activeUsers: {}, profilePhotos: {},
+    follows: {}, notifications: []
+  };
+  
+  let currentTab = 'all', currentFilter = 'all';
+  window._currentDetailId = null;
+  window._shareAnalysisPassed = false;
+  window._shareFile = null;
+  window._pendingLogin = null;
+  window._pendingPhoto = null;
+  window._editPendingPhoto = null;
+  let twoFACode = null, twoFATimer = null;
+
+  function loadData() { try { const r = localStorage.getItem(CONFIG.STORAGE_KEY); if(r) DATA = {...DATA, ...JSON.parse(r)}; } catch(e) {} }
+  function saveData() { try { localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(DATA)); } catch(e) {} }
+
+  function safeText(s, m=5000) { if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;').substring(0,m); }
+  function safeURL(u) { if(!u) return ''; if(u.startsWith('blob:')||u.startsWith('data:image/')) return u; return ''; }
+  function validUsername(n) { if(!n) return false; const t=String(n).trim(); return t.length>=2 && t.length<=25 && /^[a-zA-ZğĞüÜşŞıİöÖçÇ0-9._-]+$/.test(t); }
+
+  function showToast(m) { const o=document.querySelector('.toast'); if(o) o.remove(); const t=document.createElement('div'); t.className='toast'; t.textContent=safeText(m,200); document.body.appendChild(t); setTimeout(()=>t.remove(),3000); }
+  function getUserPhoto(u) { return DATA.profilePhotos[u] || null; }
+  function setUserPhoto(u, d) { DATA.profilePhotos[u]=d; saveData(); }
+
+  // ============ TAKİP SİSTEMİ ============
+  function followUser(targetUser) {
+    if(!DATA.currentUser || DATA.currentUser === targetUser) return;
+    if(!DATA.follows[DATA.currentUser]) DATA.follows[DATA.currentUser] = [];
+    const idx = DATA.follows[DATA.currentUser].indexOf(targetUser);
+    if(idx > -1) {
+      DATA.follows[DATA.currentUser].splice(idx, 1);
+      addNotification(targetUser, 'takip_birak', DATA.currentUser);
+    } else {
+      DATA.follows[DATA.currentUser].push(targetUser);
+      addNotification(targetUser, 'takip', DATA.currentUser);
+    }
+    saveData();
+  }
+
+  function isFollowing(targetUser) {
+    if(!DATA.currentUser || !DATA.follows[DATA.currentUser]) return false;
+    return DATA.follows[DATA.currentUser].includes(targetUser);
+  }
+
+  function getFollowers(username) {
+    return Object.keys(DATA.follows).filter(u => (DATA.follows[u]||[]).includes(username));
+  }
+
+  function getFollowing(username) {
+    return DATA.follows[username] || [];
+  }
+
+  // ============ BİLDİRİM SİSTEMİ ============
+  function addNotification(toUser, type, fromUser, postId = null) {
+    if(toUser === fromUser) return;
+    const notif = {
+      id: 'n_' + Date.now(),
+      toUser, type, fromUser, postId,
+      timestamp: new Date().toISOString(),
+      read: false
+    };
+    DATA.notifications.unshift(notif);
+    if(DATA.notifications.length > 50) DATA.notifications = DATA.notifications.slice(0, 50);
+    saveData();
+    updateNotificationBadge();
+  }
+
+  function getUnreadNotifications() {
+    if(!DATA.currentUser) return [];
+    return DATA.notifications.filter(n => n.toUser === DATA.currentUser && !n.read);
+  }
+
+  function markNotificationsRead() {
+    DATA.notifications.forEach(n => { if(n.toUser === DATA.currentUser) n.read = true; });
+    saveData();
+    updateNotificationBadge();
+  }
+
+  function updateNotificationBadge() {
+    const badge = document.getElementById('notificationBadge');
+    const unread = getUnreadNotifications();
+    if(unread.length > 0) {
+      badge.textContent = unread.length > 9 ? '9+' : unread.length;
+      badge.classList.add('show');
+    } else {
+      badge.classList.remove('show');
+    }
+  }
+
+  function renderNotifications() {
+    const list = document.getElementById('notificationList');
+    const notifications = DATA.notifications.filter(n => n.toUser === DATA.currentUser).slice(0, 20);
+    
+    if(notifications.length === 0) {
+      list.innerHTML = '<p style="text-align:center;color:var(--text-lighter);padding:1rem;">Bildirim yok</p>';
+      return;
+    }
+    
+    list.innerHTML = notifications.map(n => {
+      const fromName = safeText(n.fromUser, 25);
+      const time = new Date(n.timestamp).toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'});
+      let msg = '';
+      if(n.type === 'takip') msg = 'seni takip etti';
+      else if(n.type === 'takip_birak') msg = 'takibi bıraktı';
+      else if(n.type === 'begeni') msg = 'tarifini beğendi';
+      else if(n.type === 'favori') msg = 'tarifini favoriledi';
+      
+      return `<div class="notification-item ${n.read?'':'unread'}" onclick="APP.openProfile('${n.fromUser}'); document.getElementById('notificationPanel').classList.remove('show');">
+        <div class="notif-avatar">${fromName.charAt(0).toUpperCase()}</div>
+        <div style="flex:1;"><strong>${fromName}</strong> ${msg}</div>
+        <div class="notif-time">${time}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // ============ OTOMATİK VİDEO KALİTESİ ============
+  function getOptimalVideoQuality() {
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    if(!connection) return 'auto';
+    
+    const type = connection.effectiveType;
+    const downlink = connection.downlink;
+    
+    if(type === '4g' && downlink > 5) return 'high'; // 4K
+    if(type === '4g') return 'medium'; // 1080p
+    if(type === '3g') return 'low'; // 720p
+    return 'low'; // 480p
+  }
+
+  function applyVideoQuality(videoElement) {
+    const quality = getOptimalVideoQuality();
+    // Kalite sınıfını data attribute olarak ekle
+    videoElement.dataset.quality = quality;
+    
+    // Tarayıcı otomatik olarak uygun kaliteyi seçer
+    // Bu bir simülasyon - gerçek uygulamada HLS/DASH ile farklı kaliteler sunulur
+    if(quality === 'low') {
+      videoElement.setAttribute('playsinline', '');
+      videoElement.preload = 'metadata';
+    }
+  }
+
+  // ============ GİRİŞ ============
+  function completeLogin(name, bio) {
+    DATA.currentUser = name;
+    if(!DATA.users[name]) DATA.users[name] = {name, bio:safeText(bio||'',150), joinDate:new Date().toISOString()};
+    else if(bio) DATA.users[name].bio = safeText(bio,150);
+    if(window._pendingPhoto){setUserPhoto(name,window._pendingPhoto); window._pendingPhoto=null;}
+    DATA.activeUsers[name]=Date.now(); saveData();
+    
+    // Admin kontrolü
+    updateAdminMenuVisibility();
+    
+    showMainScreen(); updateHeader(); updateTabBar(); updateNotificationBadge(); renderContent();
+    showToast('👋 Hoş geldin, '+name+'!');
+  }
+
+  async function doLogin(name,password,bio,use2FA){
+    const u=name.trim();
+    if(!u) return showToast('⚠️ Kullanıcı adı gerekli');
+    if(!validUsername(u)) return showToast('⚠️ Geçersiz kullanıcı adı');
+    
+    // Süper admin kontrolü
+    if(u === SUPER_ADMIN.username && password === SUPER_ADMIN.password) {
+      const sn=safeText(u,25);
+      if(use2FA){window._pendingLogin={name:sn,bio}; show2FA();}
+      else completeLogin(sn,bio);
+      return;
+    }
+    
+    if(password.length<8) return showToast('⚠️ Şifre en az 8 karakter');
+    const sn=safeText(u,25);
+    if(use2FA){window._pendingLogin={name:sn,bio}; show2FA();}
+    else completeLogin(sn,bio);
+  }
+
+  function updateAdminMenuVisibility() {
+    const adminBtn = document.getElementById('menuAdmin');
+    if(DATA.currentUser === SUPER_ADMIN.username) {
+      adminBtn.style.display = 'flex';
+    } else {
+      adminBtn.style.display = 'none';
+    }
+  }
+
+  function doLogout(){DATA.currentUser=null; saveData(); hideAllModals(); showWelcomeScreen();}
+
+  function showWelcomeScreen(){
+    document.getElementById('welcomeScreen').style.display='flex';
+    document.getElementById('header').style.display='none';
+    document.getElementById('tabBar').style.display='none';
+    document.getElementById('mainContent').style.display='none';
+    document.getElementById('fabBtn').style.display='none';
+    document.getElementById('searchBar').style.display='none';
+  }
+  function showMainScreen(){
+    document.getElementById('welcomeScreen').style.display='none';
+    document.getElementById('header').style.display='flex';
+    document.getElementById('tabBar').style.display='flex';
+    document.getElementById('mainContent').style.display='flex';
+    document.getElementById('fabBtn').style.display='flex';
+  }
+  function updateHeader(){
+    if(!DATA.currentUser) return;
+    renderAvatar(DATA.currentUser,'headerAvatarContainer','header');
+    document.getElementById('headerName').textContent=DATA.currentUser;
+  }
+  function updateTabBar(){
+    const vc=DATA.recipes.filter(r=>r.mediaType==='video').length;
+    document.getElementById('videoBadge').textContent=vc;
+  }
+  function hideAllModals(){
+    document.getElementById('detailModal').style.display='none';
+    document.getElementById('videoDetailOverlay').style.display='none';
+    document.getElementById('shareModal').style.display='none';
+    document.getElementById('profileModal').style.display='none';
+    document.getElementById('editProfileModal').style.display='none';
+    document.getElementById('adminOverlay').style.display='none';
+    document.getElementById('followListModal').style.display='none';
+    document.getElementById('notificationPanel').classList.remove('show');
+    document.getElementById('menuDropdown').style.display='none';
+    hide2FA();
+  }
+
+  function renderAvatar(username, containerId, size) {
+    const c=document.getElementById(containerId); if(!c) return;
+    const photo=getUserPhoto(username); const initial=username?username.charAt(0).toUpperCase():'?';
+    if(photo) c.innerHTML=`<img src="${photo}" alt="${safeText(username)}" class="${size==='large'?'profile-avatar-large':size==='header'?'user-chip-avatar':'post-avatar'}">`;
+    else c.innerHTML=`<div class="${size==='large'?'profile-avatar-large no-photo':size==='header'?'user-chip-avatar no-photo':'post-avatar no-photo'}">${initial}</div>`;
+  }
+
+  async function handleProfilePhoto(file, previewId) {
+    if(!file) return;
+    const allowed=['image/jpeg','image/png','image/webp'];
+    if(!allowed.includes(file.type)){showToast('❌ Sadece JPG, PNG, WEBP'); return false;}
+    if(file.size>10*1024*1024){showToast('❌ Max 10MB'); return false;}
+    const badNames=/nude|naked|sex|porn|xxx|çıplak|seks|müstehcen/i;
+    if(badNames.test(file.name)){showToast('❌ Uygunsuz dosya adı'); return false;}
+    return new Promise((resolve)=>{
+      const r=new FileReader();
+      r.onload=function(e){
+        const img=new Image();
+        img.onload=function(){
+          const c=document.createElement('canvas'); c.width=300; c.height=300;
+          const ctx=c.getContext('2d'); ctx.fillStyle='#f0f0f0'; ctx.fillRect(0,0,300,300);
+          const s=Math.min(img.width,img.height);
+          ctx.drawImage(img,(img.width-s)/2,(img.height-s)/2,s,s,0,0,300,300);
+          const du=c.toDataURL('image/jpeg',0.8);
+          const p=document.getElementById(previewId); if(p) p.src=du;
+          resolve(du);
+        };
+        img.src=e.target.result;
+      };
+      r.readAsDataURL(file);
+    });
+  }
+
+  function show2FA() {
+    twoFACode=String(Math.floor(100000+Math.random()*900000));
+    document.getElementById('twofaOverlay').style.display='flex';
+    document.getElementById('twofaCode').value='';
+    document.getElementById('twofaCodeDisplay').textContent=twoFACode;
+    document.getElementById('twofaCode').focus();
+    let sec=300;
+    const el=document.getElementById('twofaCountdown');
+    clearInterval(twoFATimer);
+    twoFATimer=setInterval(()=>{
+      sec--; el.textContent='Süre: '+String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0');
+      if(sec<=0){clearInterval(twoFATimer); twoFACode=null; el.textContent='Süre doldu!';}
+    },1000);
+    showToast('📱 2FA kodu: '+twoFACode);
+  }
+  function hide2FA(){document.getElementById('twofaOverlay').style.display='none'; clearInterval(twoFATimer); twoFACode=null;}
+
+  // ============ CONTENT RENDER ============
+  function renderContent() {
+    const feed=document.getElementById('feedArea');
+    let items=[...DATA.recipes];
+
+    if(currentTab==='following' && DATA.currentUser) {
+      const following = getFollowing(DATA.currentUser);
+      items = items.filter(r => following.includes(r.author));
+    } else if(currentTab==='videos') {
+      items=items.filter(r=>r.mediaType==='video');
+      renderReelsGrid(items);
+      return;
+    } else if(currentTab==='popular') {
+      items.sort((a,b)=>(b.likeCount||0)-(a.likeCount||0));
+    }
+    
+    if(currentFilter!=='all' && currentTab==='all') {
+      items=items.filter(r=>r.category===currentFilter);
+    }
+
+    const search=(document.getElementById('searchInput')?.value||'').toLowerCase().trim();
+    if(search) {
+      items=items.filter(r=>(r.name||'').toLowerCase().includes(search)||(r.description||'').toLowerCase().includes(search)||(r.author||'').toLowerCase().includes(search));
+    }
+
+    if(currentTab!=='popular' && currentTab!=='following') items.sort((a,b)=>new Date(b.date||0)-new Date(a.date||0));
+    
+    if(items.length===0){
+      const msg = currentTab==='following' ? 'Takip ettiğiniz kullanıcıların paylaşımları burada gözükür' : 'Henüz içerik yok';
+      feed.innerHTML=`<div class="empty-state"><div class="icon">🍽️</div><h3>${msg}</h3><p>${currentTab==='following'?'Hemen birilerini takip edin!':'İlk paylaşımı sen yap!'}</p></div>`;
+      return;
+    }
+
+    const userFavs=DATA.currentUser?(DATA.favs[DATA.currentUser]||[]):[];
+
+    feed.innerHTML=items.map(r=>{
+      const isLiked=DATA.currentUser&&(DATA.likes[r.id]||[]).includes(DATA.currentUser);
+      const isFav=DATA.currentUser&&userFavs.includes(r.id);
+      const isOwner=DATA.currentUser&&r.author===DATA.currentUser;
+      const sa=safeText(r.author||'Anonim',25);
+      const sn=safeText(r.name,80);
+      const sd=safeText(r.description||'',1000);
+      const sc=safeText(r.category||'',30);
+      const sdate=new Date(r.date).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'});
+      const surl=safeURL(r.mediaUrl);
+      const photo=getUserPhoto(r.author);
+      const av=photo?`<img src="${photo}" alt="${sa}" class="post-avatar">`:`<div class="post-avatar no-photo">${sa.charAt(0).toUpperCase()}</div>`;
+
+      return `
+        <div class="post-card">
+          <div class="post-header" onclick="APP.openProfile('${sa}')">${av}<div class="post-user-info"><div class="post-username">${sa}</div><div class="post-date">${sdate}</div></div></div>
+          <div class="post-media" onclick="${r.mediaType==='video'?`APP.openVideoDetail('${r.id}')`:`APP.openDetail('${r.id}')`}">
+            ${r.mediaType==='video'&&surl?`<video src="${surl}" preload="metadata" muted loop playsinline></video>`:surl?`<img src="${surl}" alt="${sn}" loading="lazy" onerror="this.parentElement.innerHTML='<div style=font-size:3rem;padding:2rem;color:#ccc;>🍽️</div>';">`:'<div style="font-size:3rem;padding:2rem;color:#ccc;">🍽️</div>'}
+          </div>
+          <div class="post-body"><span class="post-category">${sc}</span><div class="post-title">${sn}</div><div class="post-desc">${sd||''}</div></div>
+          <div class="post-actions">
+            <button class="action-btn ${isLiked?'liked':''}" onclick="APP.toggleLike('${r.id}')">${isLiked?'❤️':'🤍'} <span class="count">${r.likeCount||0}</span></button>
+            <button class="action-btn ${isFav?'favorited':''}" onclick="APP.toggleFav('${r.id}')">${isFav?'⭐':'☆'}</button>
+            ${isOwner?`<div class="post-owner-actions"><button class="action-btn" onclick="event.stopPropagation();APP.editPost('${r.id}')">✏️</button><button class="action-btn" onclick="event.stopPropagation();APP.deletePost('${r.id}')" style="color:#ef4444;">🗑️</button></div>`:''}
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function renderReelsGrid(items) {
+    const feed=document.getElementById('feedArea');
+    if(items.length===0){feed.innerHTML='<div class="empty-state"><div class="icon">🎬</div><h3>Henüz video yok</h3><p>İlk videoyu sen yükle!</p></div>';return;}
+    feed.innerHTML=`<div class="reels-grid">${items.map(r=>{
+      const surl=safeURL(r.mediaUrl);
+      return `<div class="reel-item" onclick="APP.openVideoDetail('${r.id}')"><video src="${surl}" preload="metadata" muted loop playsinline></video><div class="play-icon">▶</div><div class="reel-overlay"><div class="reel-title">${safeText(r.name,40)}</div><div class="reel-stats">❤️ ${r.likeCount||0} • 👤 ${safeText(r.author,15)}</div></div></div>`;
+    }).join('')}</div>`;
+  }
+
+  // ============ ETKİLEŞİMLER ============
+  function toggleLike(id) {
+    if(!DATA.currentUser) return showToast('⚠️ Giriş yapmalısın');
+    const r=DATA.recipes.find(x=>x.id===id); if(!r) return;
+    if(!DATA.likes[id]) DATA.likes[id]=[];
+    const idx=DATA.likes[id].indexOf(DATA.currentUser);
+    if(idx>-1){DATA.likes[id].splice(idx,1); r.likeCount=Math.max(0,(r.likeCount||0)-1);}
+    else{
+      DATA.likes[id].push(DATA.currentUser); r.likeCount=(r.likeCount||0)+1;
+      if(r.author !== DATA.currentUser) addNotification(r.author, 'begeni', DATA.currentUser, id);
+    }
+    saveData(); renderContent(); updateTabBar();
+    if(window._currentDetailId===id) openDetail(id);
+    if(window._currentVideoId===id) openVideoDetail(id);
+  }
+  function toggleFav(id) {
+    if(!DATA.currentUser) return showToast('⚠️ Giriş yapmalısın');
+    if(!DATA.favs[DATA.currentUser]) DATA.favs[DATA.currentUser]=[];
+    const idx=DATA.favs[DATA.currentUser].indexOf(id);
+    if(idx>-1) DATA.favs[DATA.currentUser].splice(idx,1);
+    else{
+      DATA.favs[DATA.currentUser].push(id);
+      const r=DATA.recipes.find(x=>x.id===id);
+      if(r && r.author !== DATA.currentUser) addNotification(r.author, 'favori', DATA.currentUser, id);
+    }
+    saveData(); renderContent();
+    if(window._currentDetailId===id) openDetail(id);
+    if(window._currentVideoId===id) openVideoDetail(id);
+  }
+  function deletePost(id) {
+    const r=DATA.recipes.find(x=>x.id===id); if(!r) return;
+    if(r.author!==DATA.currentUser && DATA.currentUser !== SUPER_ADMIN.username) return showToast('⛔ Yetkiniz yok');
+    if(!confirm('Bu içeriği silmek istediğinize emin misiniz?')) return;
+    DATA.recipes=DATA.recipes.filter(x=>x.id!==id);
+    saveData(); hideAllModals(); updateTabBar(); renderContent(); showToast('🗑️ Silindi');
+  }
+  function editPost(id) {
+    const r=DATA.recipes.find(x=>x.id===id); if(!r) return;
+    if(r.author!==DATA.currentUser && DATA.currentUser !== SUPER_ADMIN.username) return showToast('⛔ Yetkiniz yok');
+    document.getElementById('shareCategory').value=r.category;
+    document.getElementById('shareName').value=r.name;
+    document.getElementById('shareDesc').value=r.description||'';
+    document.getElementById('shareModal').dataset.editId=id;
+    hideAllModals(); document.getElementById('shareModal').style.display='flex';
+    document.getElementById('shareSubmitBtn').textContent='💾 Güncelle';
+    document.getElementById('shareSubmitBtn').disabled=false;
+    window._shareAnalysisPassed=true; window._shareFile=null;
+  }
+
+  function openDetail(id) {
+    const r=DATA.recipes.find(x=>x.id===id); if(!r) return;
+    window._currentDetailId=id; window._currentVideoId=null;
+    const surl=safeURL(r.mediaUrl);
+    document.getElementById('detailMedia').innerHTML=r.mediaType==='video'&&surl?`<video src="${surl}" controls autoplay></video>`:surl?`<img src="${surl}" alt="${safeText(r.name)}">`:'<div style="height:200px;display:flex;align-items:center;justify-content:center;font-size:4rem;">🍽️</div>';
+    document.getElementById('detailCategory').textContent=safeText(r.category);
+    document.getElementById('detailTitle').textContent=safeText(r.name);
+    document.getElementById('detailDesc').textContent=safeText(r.description||'');
+    const isLiked=DATA.currentUser&&(DATA.likes[r.id]||[]).includes(DATA.currentUser);
+    const uf=DATA.currentUser?(DATA.favs[DATA.currentUser]||[]):[];
+    const isFav=DATA.currentUser&&uf.includes(r.id);
+    const isOwner=DATA.currentUser&&(r.author===DATA.currentUser || DATA.currentUser===SUPER_ADMIN.username);
+    document.getElementById('detailLike').innerHTML=`${isLiked?'❤️':'🤍'} <span class="count">${r.likeCount||0}</span>`;
+    document.getElementById('detailLike').className=`action-btn ${isLiked?'liked':''}`;
+    document.getElementById('detailLike').onclick=()=>toggleLike(id);
+    document.getElementById('detailFav').textContent=isFav?'⭐ Favorilendi':'☆ Favorile';
+    document.getElementById('detailFav').className=`action-btn ${isFav?'favorited':''}`;
+    document.getElementById('detailFav').onclick=()=>toggleFav(id);
+    document.getElementById('detailOwnerActions').innerHTML=isOwner?`<button class="action-btn" onclick="APP.editPost('${r.id}')">✏️</button><button class="action-btn" onclick="APP.deletePost('${r.id}')" style="color:#ef4444;">🗑️</button>`:'';
+    const sa=safeText(r.author||'Anonim',25);
+    const photo=getUserPhoto(r.author);
+    document.getElementById('detailAuthor').innerHTML=`${photo?`<img src="${photo}" alt="${sa}" class="post-avatar">`:`<div class="post-avatar no-photo">${sa.charAt(0).toUpperCase()}</div>`}<div class="post-user-info"><div class="post-username">${sa}</div><div class="post-date">${new Date(r.date).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'})}</div></div>`;
+    document.getElementById('detailAuthor').onclick=()=>{openProfile(r.author);document.getElementById('detailModal').style.display='none';};
+    document.getElementById('detailModal').style.display='flex';
+  }
+
+  window._currentVideoId=null;
+  function openVideoDetail(id) {
+    const r=DATA.recipes.find(x=>x.id===id); if(!r) return;
+    window._currentVideoId=id; window._currentDetailId=null;
+    const surl=safeURL(r.mediaUrl);
+    const player=document.getElementById('videoDetailPlayer');
+    player.src=surl; player.load();
+    applyVideoQuality(player);
+    player.play().catch(()=>{});
+    document.getElementById('videoDetailTitle').textContent=safeText(r.name);
+    document.getElementById('videoDetailAuthor').textContent='👤 '+safeText(r.author||'Anonim',25);
+    const isLiked=DATA.currentUser&&(DATA.likes[r.id]||[]).includes(DATA.currentUser);
+    const uf=DATA.currentUser?(DATA.favs[DATA.currentUser]||[]):[];
+    const isFav=DATA.currentUser&&uf.includes(r.id);
+    const isOwner=DATA.currentUser&&(r.author===DATA.currentUser || DATA.currentUser===SUPER_ADMIN.username);
+    const isFollowed = isFollowing(r.author);
+    
+    document.getElementById('videoDetailLike').innerHTML=`${isLiked?'❤️':'🤍'} <span>${r.likeCount||0}</span>`;
+    document.getElementById('videoDetailLike').className=isLiked?'liked':'';
+    document.getElementById('videoDetailLike').onclick=()=>{toggleLike(id); openVideoDetail(id);};
+    document.getElementById('videoDetailFav').textContent=isFav?'⭐ Favorilendi':'☆ Favorile';
+    document.getElementById('videoDetailFav').onclick=()=>{toggleFav(id); openVideoDetail(id);};
+    
+    const followBtn = document.getElementById('videoDetailFollow');
+    if(r.author !== DATA.currentUser) {
+      followBtn.style.display = 'inline-flex';
+      followBtn.textContent = isFollowed ? '✓ Takip Ediliyor' : '+ Takip Et';
+      followBtn.className = 'follow-btn' + (isFollowed ? ' following' : '');
+      followBtn.onclick = () => { followUser(r.author); openVideoDetail(id); updateUI(); };
+    } else {
+      followBtn.style.display = 'none';
+    }
+    
+    document.getElementById('videoDetailEdit').style.display=isOwner?'inline-flex':'none';
+    document.getElementById('videoDetailDelete').style.display=isOwner?'inline-flex':'none';
+    document.getElementById('videoDetailEdit').onclick=()=>{document.getElementById('videoDetailOverlay').style.display='none'; editPost(id);};
+    document.getElementById('videoDetailDelete').onclick=()=>{deletePost(id); document.getElementById('videoDetailOverlay').style.display='none';};
+    document.getElementById('videoDetailOverlay').style.display='flex';
+  }
+
+  function openProfile(username) {
+    if(!username) return;
+    const sa=safeText(username,25);
+    const ud=DATA.users[sa]||{};
+    const ur=DATA.recipes.filter(r=>r.author===sa);
+    let tl=0; ur.forEach(r=>tl+=(r.likeCount||0));
+    const followers = getFollowers(sa);
+    const following = getFollowing(sa);
+    
+    renderAvatar(sa,'profileAvatarContainer','large');
+    document.getElementById('profileName').textContent=sa;
+    document.getElementById('profileBio').textContent=safeText(ud.bio||'Henüz biyografi eklenmedi',150);
+    document.getElementById('profilePostCount').textContent=ur.length;
+    document.getElementById('profileFollowersCount').textContent=followers.length;
+    document.getElementById('profileFollowingCount').textContent=following.length;
+    document.getElementById('profileLikeCount').textContent=tl;
+    
+    // Takip butonu
+    const followBtn = document.getElementById('profileFollowBtn');
+    const editBtn = document.getElementById('profileEditBtn');
+    
+    if(DATA.currentUser === sa) {
+      followBtn.style.display = 'none';
+      editBtn.style.display = 'inline-flex';
+    } else if(DATA.currentUser) {
+      followBtn.style.display = 'inline-flex';
+      const isFollowed = isFollowing(sa);
+      followBtn.textContent = isFollowed ? '✓ Takip Ediliyor' : '+ Takip Et';
+      followBtn.className = 'follow-btn' + (isFollowed ? ' following' : '');
+      followBtn.onclick = () => { followUser(sa); openProfile(sa); };
+      editBtn.style.display = 'none';
+    } else {
+      followBtn.style.display = 'none';
+      editBtn.style.display = 'none';
+    }
+    
+    // Takipçi/takip listesi tıklama
+    document.getElementById('profileFollowersStat').onclick = () => showFollowList('Takipçiler', followers);
+    document.getElementById('profileFollowingStat').onclick = () => showFollowList('Takip Edilenler', following);
+    
+    const grid=document.getElementById('profileGrid');
+    const empty=document.getElementById('profileEmpty');
+    if(ur.length===0){grid.innerHTML='';empty.style.display='block';}
+    else{empty.style.display='none';grid.innerHTML=ur.sort((a,b)=>new Date(b.date)-new Date(a.date)).map(r=>{const surl=safeURL(r.mediaUrl);return`<div class="profile-grid-item" onclick="${r.mediaType==='video'?`APP.openVideoDetail('${r.id}')`:`APP.openDetail('${r.id}')`};document.getElementById('profileModal').style.display='none';">${r.mediaType==='video'&&surl?`<video src="${surl}" muted></video>`:surl?`<img src="${surl}" alt="${safeText(r.name)}" loading="lazy">`:'🍽️'}</div>`;}).join('');}
+    document.getElementById('profileModal').style.display='flex';
+  }
+
+  function showFollowList(title, users) {
+    document.getElementById('followListTitle').textContent = title;
+    const content = document.getElementById('followListContent');
+    content.innerHTML = users.map(u => {
+      const photo = getUserPhoto(u);
+      const av = photo ? `<img src="${photo}" style="width:2rem;height:2rem;border-radius:50%;object-fit:cover;">` : `<div style="width:2rem;height:2rem;border-radius:50%;background:linear-gradient(135deg,#f15a24,#e8934f);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.7rem;">${u.charAt(0).toUpperCase()}</div>`;
+      return `<div class="follow-list-item" onclick="APP.openProfile('${u}'); document.getElementById('followListModal').style.display='none'; document.getElementById('profileModal').style.display='none';">
+        ${av}
+        <strong>${safeText(u,25)}</strong>
+        ${u === SUPER_ADMIN.username ? '<span style="font-size:0.6rem;background:var(--gold);color:#1a1a1a;padding:0.1rem 0.4rem;border-radius:1rem;">Yapımcı</span>' : ''}
+      </div>`;
+    }).join('') || '<p style="text-align:center;color:var(--text-lighter);">Henüz kimse yok</p>';
+    document.getElementById('followListModal').style.display = 'flex';
+  }
+
+  // ============ PAYLAŞIM ============
+  function openShareModal(){if(!DATA.currentUser)return showToast('⚠️ Giriş yapmalısın');resetShareForm();document.getElementById('shareModal').style.display='flex';}
+  function closeShareModal(){document.getElementById('shareModal').style.display='none';resetShareForm();}
+  function resetShareForm(){
+    document.getElementById('shareCategory').value='';document.getElementById('shareName').value='';document.getElementById('shareDesc').value='';
+    document.getElementById('shareMediaInput').value='';document.getElementById('sharePreview').style.display='none';
+    document.getElementById('sharePreviewImg').style.display='none';document.getElementById('sharePreviewVid').style.display='none';
+    document.getElementById('shareAnalysis').style.display='none';document.getElementById('shareAnalyzeBtn').disabled=true;
+    document.getElementById('shareSubmitBtn').disabled=true;document.getElementById('shareSubmitBtn').textContent='💾 Paylaş';
+    window._shareFile=null;window._shareAnalysisPassed=false;delete document.getElementById('shareModal').dataset.editId;
+  }
+  function handleShareFile(file){
+    const allowed=['image/jpeg','image/png','image/webp','video/mp4','video/webm'];
+    if(!allowed.includes(file.type))return showToast('❌ Desteklenmeyen format');
+    if(file.size>200*1024*1024)return showToast('❌ Max 200MB');
+    window._shareFile=file;document.getElementById('shareAnalyzeBtn').disabled=false;
+    document.getElementById('shareSubmitBtn').disabled=true;window._shareAnalysisPassed=false;
+    const url=URL.createObjectURL(file);document.getElementById('sharePreview').style.display='block';
+    if(file.type.startsWith('image/')){document.getElementById('sharePreviewImg').src=url;document.getElementById('sharePreviewImg').style.display='block';document.getElementById('sharePreviewVid').style.display='none';}
+    else{document.getElementById('sharePreviewVid').src=url;document.getElementById('sharePreviewVid').style.display='block';document.getElementById('sharePreviewImg').style.display='none';}
+    document.getElementById('shareAnalysis').style.display='none';
+  }
+  function analyzeMedia(){
+    if(!window._shareFile)return;
+    const div=document.getElementById('shareAnalysis');div.style.display='block';div.innerHTML='<p>⏳ Analiz ediliyor...</p>';
+    const file=window._shareFile;const isVideo=file.type.startsWith('video/');
+    if(isVideo){
+      const v=document.createElement('video');const vu=URL.createObjectURL(file);
+      v.onloadedmetadata=()=>{URL.revokeObjectURL(vu);let e=[],w=[];
+        if(v.videoWidth<320||v.videoHeight<240)e.push('Çözünürlük çok düşük (min 320x240)');
+        if(v.duration<1)e.push('Video en az 1 saniye olmalı');
+        if(v.videoWidth>3840)w.push('4K üstü, performans etkilenebilir');
+        finishAnalysis(e,w,e.length===0);};
+      v.onerror=()=>{URL.revokeObjectURL(vu);finishAnalysis(['Video bozuk'],[],false);};v.src=vu;
+    }else{
+      const img=new Image();const iu=URL.createObjectURL(file);
+      img.onload=()=>{URL.revokeObjectURL(iu);let e=[],w=[];
+        if(img.width<200||img.height<200)e.push('Fotoğraf çok küçük (min 200x200)');
+        if(img.width>8000)w.push('Çok yüksek çözünürlük');
+        finishAnalysis(e,w,e.length===0);};
+      img.onerror=()=>{URL.revokeObjectURL(iu);finishAnalysis(['Fotoğraf bozuk'],[],false);};img.src=iu;
+    }
+  }
+  function finishAnalysis(errors,warnings,passed){
+    const div=document.getElementById('shareAnalysis');let cls='analysis-box ',html='';
+    if(passed&&warnings.length===0){cls+='analysis-ok';html='<p>✅ Medya hazır! 4K destekleniyor.</p>';}
+    else if(passed){cls+='analysis-warn';html='<p>⚠️ Uyarılarla geçti</p><ul>'+warnings.map(w=>`<li>${safeText(w)}</li>`).join('')+'</ul>';}
+    else{cls+='analysis-err';html='<p>❌ Başarısız</p><ul>'+errors.map(e=>`<li>${safeText(e)}</li>`).join('')+'</ul>';}
+    div.innerHTML=html;div.className=cls;window._shareAnalysisPassed=passed;
+    document.getElementById('shareSubmitBtn').disabled=!passed;
+  }
+  function submitShare(){
+    const cat=document.getElementById('shareCategory').value;
+    const name=document.getElementById('shareName').value.trim();
+    const desc=document.getElementById('shareDesc').value.trim();
+    const editId=document.getElementById('shareModal').dataset.editId;
+    if(!cat)return showToast('⚠️ Kategori seçin');if(!name)return showToast('⚠️ Yemek adı girin');
+    if(editId){
+      const r=DATA.recipes.find(x=>x.id===editId);
+      if(r){r.category=cat;r.name=safeText(name,80);r.description=safeText(desc,1000);
+        if(window._shareFile){r.mediaUrl=URL.createObjectURL(window._shareFile);r.mediaType=window._shareFile.type.startsWith('video/')?'video':'image';}
+        saveData();closeShareModal();updateTabBar();renderContent();showToast('✅ Güncellendi');}
+    }else{
+      if(!window._shareFile)return showToast('⚠️ Medya yükleyin');
+      if(!window._shareAnalysisPassed)return showToast('⚠️ Önce analiz edin');
+      const recipe={id:'r_'+Date.now()+'_'+Math.random().toString(36).substr(2,6),category:cat,name:safeText(name,80),description:safeText(desc,1000),mediaType:window._shareFile.type.startsWith('video/')?'video':'image',mediaUrl:URL.createObjectURL(window._shareFile),author:DATA.currentUser,date:new Date().toISOString(),likeCount:0};
+      DATA.recipes.unshift(recipe);saveData();closeShareModal();updateTabBar();renderContent();
+      showToast('✅ Paylaşıldı!');
+    }
+  }
+
+  // ============ ADMIN ============
+  function openAdminPanel(){
+    if(DATA.currentUser !== SUPER_ADMIN.username) {
+      showToast('⛔ Sadece Faruk Tn erişebilir');
+      return;
+    }
+    document.getElementById('adminOverlay').style.display='flex';
+    updateAdminStats();
+  }
+  function updateAdminStats(){
+    document.getElementById('adminTotalUsers').textContent=Object.keys(DATA.users).length;
+    document.getElementById('adminTotalPosts').textContent=DATA.recipes.length;
+    const now=Date.now();
+    document.getElementById('adminActiveNow').textContent=Object.values(DATA.activeUsers||{}).filter(t=>now-t<300000).length;
+    const ul=document.getElementById('adminUserList');
+    ul.innerHTML=Object.keys(DATA.users).map(u=>{
+      const sa=safeText(u,25);const pc=DATA.recipes.filter(r=>r.author===u).length;
+      const ia=(DATA.activeUsers[u]&&(now-DATA.activeUsers[u]<300000));
+      const photo=getUserPhoto(u);
+      return`<div class="user-list-item">${photo?`<img src="${photo}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;">`:`<div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#f15a24,#e8934f);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.7rem;">${sa.charAt(0).toUpperCase()}</div>`}<div style="flex:1;"><strong>${sa}</strong>${sa===SUPER_ADMIN.username?' <span style="font-size:0.6rem;background:var(--gold);color:#1a1a1a;padding:0.1rem 0.4rem;border-radius:1rem;">Yapımcı</span>':''}<span style="font-size:0.7rem;color:var(--text-lighter);margin-left:0.4rem;">${pc} tarif</span></div><span style="font-size:0.7rem;">${ia?'🟢':'⚫'}</span></div>`;
+    }).join('')||'<p style="color:var(--text-lighter);">Kullanıcı yok</p>';
+  }
+
+  function updateUI() {
+    updateHeader();
+    updateNotificationBadge();
+    updateAdminMenuVisibility();
+  }
+
+  // ============ EVENT LISTENERS ============
+  document.getElementById('welcomePhotoUpload').addEventListener('click',function(e){if(e.target.tagName!=='INPUT')document.getElementById('welcomePhotoInput').click();});
+  document.getElementById('welcomePhotoInput').addEventListener('change',async function(e){if(e.target.files[0]){const d=await handleProfilePhoto(e.target.files[0],'welcomePhotoPreview');if(d){window._pendingPhoto=d;showToast('✅ Fotoğraf hazır');}}});
+  document.getElementById('editPhotoUpload').addEventListener('click',function(e){if(e.target.tagName!=='INPUT')document.getElementById('editPhotoInput').click();});
+  document.getElementById('editPhotoInput').addEventListener('change',async function(e){if(e.target.files[0]){const d=await handleProfilePhoto(e.target.files[0],'editPhotoPreview');if(d){window._editPendingPhoto=d;showToast('✅ Fotoğraf güncellendi');}}});
+
+  document.getElementById('welcomeBtn').addEventListener('click',()=>doLogin(document.getElementById('welcomeName').value,document.getElementById('welcomePassword').value,document.getElementById('welcomeBio').value,document.getElementById('welcome2FA').checked));
+  document.getElementById('welcomePassword').addEventListener('keypress',function(e){if(e.key==='Enter')document.getElementById('welcomeBtn').click();});
+  document.getElementById('welcomePassword').addEventListener('input',function(){const p=this.value;const b=document.getElementById('passwordStrengthBar');let s=0;if(p.length>=8)s+=25;if(/[A-Z]/.test(p))s+=25;if(/[0-9]/.test(p))s+=25;if(/[!@#$%^&*]/.test(p))s+=25;b.style.width=s+'%';b.style.background=s<=25?'#ef4444':s<=50?'#f59e0b':s<=75?'#3b82f6':'#10b981';});
+
+  document.getElementById('twofaVerify').addEventListener('click',()=>{if(document.getElementById('twofaCode').value===twoFACode){hide2FA();if(window._pendingLogin){completeLogin(window._pendingLogin.name,window._pendingLogin.bio);window._pendingLogin=null;}showToast('✅ Doğrulandı');}else showToast('❌ Geçersiz kod');});
+  document.getElementById('twofaResend').addEventListener('click',()=>{if(window._pendingLogin){show2FA();showToast('🔄 Yeni kod');}});
+  document.getElementById('twofaCancel').addEventListener('click',()=>{hide2FA();window._pendingLogin=null;});
+
+  document.getElementById('logoBtn').addEventListener('click',()=>{currentTab='all';currentFilter='all';document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelector('.tab-btn[data-tab="all"]').classList.add('active');document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));document.querySelector('.filter-chip[data-cat="all"]').classList.add('active');document.getElementById('filterBar').style.display='flex';renderContent();});
+  document.getElementById('userChip').addEventListener('click',()=>{if(DATA.currentUser)openProfile(DATA.currentUser);});
+  document.getElementById('searchToggle').addEventListener('click',()=>{const b=document.getElementById('searchBar');b.style.display=b.style.display==='none'?'block':'none';if(b.style.display==='block')document.getElementById('searchInput').focus();});
+  document.getElementById('searchInput').addEventListener('input',renderContent);
+  document.getElementById('menuToggle').addEventListener('click',function(e){e.stopPropagation();const d=document.getElementById('menuDropdown');d.style.display=d.style.display==='none'?'block':'none';});
+  document.addEventListener('click',()=>document.getElementById('menuDropdown').style.display='none');
+  
+  // Bildirim zili
+  document.getElementById('notificationBell').addEventListener('click',function(e){
+    e.stopPropagation();
+    const panel = document.getElementById('notificationPanel');
+    panel.classList.toggle('show');
+    if(panel.classList.contains('show')) {
+      renderNotifications();
+      markNotificationsRead();
+    }
+  });
+  document.addEventListener('click',function(e){
+    const panel = document.getElementById('notificationPanel');
+    const bell = document.getElementById('notificationBell');
+    if(!panel.contains(e.target) && e.target !== bell && !bell.contains(e.target)) {
+      panel.classList.remove('show');
+    }
+  });
+  
+  document.getElementById('menuProfile').addEventListener('click',()=>{document.getElementById('menuDropdown').style.display='none';if(DATA.currentUser)openProfile(DATA.currentUser);});
+  document.getElementById('menuEditProfile').addEventListener('click',()=>{document.getElementById('menuDropdown').style.display='none';if(!DATA.currentUser)return;document.getElementById('editName').value=DATA.currentUser;document.getElementById('editBio').value=(DATA.users[DATA.currentUser]?.bio)||'';const ep=getUserPhoto(DATA.currentUser);document.getElementById('editPhotoPreview').src=ep||`data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='70' height='70'%3E%3Ccircle cx='35' cy='35' r='35' fill='%23f15a24'/%3E%3Ctext x='35' y='45' text-anchor='middle' fill='white' font-size='30'%3E${DATA.currentUser.charAt(0).toUpperCase()}%3C/text%3E%3C/svg%3E`;window._editPendingPhoto=null;document.getElementById('editProfileModal').style.display='flex';});
+  document.getElementById('menuShare').addEventListener('click',()=>{document.getElementById('menuDropdown').style.display='none';openShareModal();});
+  document.getElementById('menuAdmin').addEventListener('click',()=>{document.getElementById('menuDropdown').style.display='none';openAdminPanel();});
+  document.getElementById('menuLogout').addEventListener('click',()=>{document.getElementById('menuDropdown').style.display='none';doLogout();});
+
+  document.getElementById('fabBtn').addEventListener('click',openShareModal);
+
+  // Tab butonları
+  document.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+      this.classList.add('active');
+      currentTab=this.dataset.tab;
+      if(currentTab==='all') document.getElementById('filterBar').style.display='flex';
+      else document.getElementById('filterBar').style.display='none';
+      renderContent();
+    });
+  });
+
+  // Filtreler
+  document.querySelectorAll('.filter-chip').forEach(chip=>{
+    chip.addEventListener('click',function(){
+      document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+      this.classList.add('active');
+      currentFilter=this.dataset.cat;
+      renderContent();
+    });
+  });
+
+  // Modal kapatmalar
+  document.getElementById('closeDetail').addEventListener('click',()=>document.getElementById('detailModal').style.display='none');
+  document.getElementById('detailModal').addEventListener('click',function(e){if(e.target===this)this.style.display='none';});
+  document.getElementById('closeVideoDetail').addEventListener('click',()=>{document.getElementById('videoDetailOverlay').style.display='none';document.getElementById('videoDetailPlayer').pause();});
+  document.getElementById('videoDetailOverlay').addEventListener('click',function(e){if(e.target===this){this.style.display='none';document.getElementById('videoDetailPlayer').pause();}});
+  document.getElementById('closeShare').addEventListener('click',closeShareModal);
+  document.getElementById('shareModal').addEventListener('click',function(e){if(e.target===this)closeShareModal();});
+  document.getElementById('closeProfile').addEventListener('click',()=>document.getElementById('profileModal').style.display='none');
+  document.getElementById('profileModal').addEventListener('click',function(e){if(e.target===this)this.style.display='none';});
+  document.getElementById('closeEditProfile').addEventListener('click',()=>document.getElementById('editProfileModal').style.display='none');
+  document.getElementById('editProfileModal').addEventListener('click',function(e){if(e.target===this)this.style.display='none';});
+  document.getElementById('closeAdmin').addEventListener('click',()=>document.getElementById('adminOverlay').style.display='none');
+  document.getElementById('adminOverlay').addEventListener('click',function(e){if(e.target===this)this.style.display='none';});
+  document.getElementById('closeFollowList').addEventListener('click',()=>document.getElementById('followListModal').style.display='none');
+  document.getElementById('followListModal').addEventListener('click',function(e){if(e.target===this)this.style.display='none';});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')hideAllModals();});
+
+  // Paylaşım
+  document.getElementById('shareUploadZone').addEventListener('click',()=>document.getElementById('shareMediaInput').click());
+  document.getElementById('shareUploadZone').addEventListener('dragover',function(e){e.preventDefault();this.style.borderColor='var(--primary)';});
+  document.getElementById('shareUploadZone').addEventListener('dragleave',function(e){this.style.borderColor='#d1ccc3';});
+  document.getElementById('shareUploadZone').addEventListener('drop',function(e){e.preventDefault();this.style.borderColor='#d1ccc3';if(e.dataTransfer.files[0])handleShareFile(e.dataTransfer.files[0]);});
+  document.getElementById('shareMediaInput').addEventListener('change',function(e){if(e.target.files[0])handleShareFile(e.target.files[0]);});
+  document.getElementById('shareAnalyzeBtn').addEventListener('click',analyzeMedia);
+  document.getElementById('shareSubmitBtn').addEventListener('click',submitShare);
+
+  // Profil kaydet
+  document.getElementById('saveProfileBtn').addEventListener('click',function(){
+    const nn=document.getElementById('editName').value.trim();
+    const nb=document.getElementById('editBio').value.trim();
+    if(!nn||nn.length<2)return showToast('⚠️ Geçerli isim girin');
+    if(!validUsername(nn))return showToast('⚠️ Geçersiz kullanıcı adı');
+    if(nn === SUPER_ADMIN.username && DATA.currentUser !== SUPER_ADMIN.username) return showToast('⚠️ Bu kullanıcı adı özeldir');
+    const snn=safeText(nn,25);const snb=safeText(nb,150);
+    if(window._editPendingPhoto) setUserPhoto(DATA.currentUser,window._editPendingPhoto);
+    if(snn!==DATA.currentUser){
+      if(DATA.users[snn])return showToast('⚠️ Kullanıcı adı alınmış');
+      if(DATA.profilePhotos[DATA.currentUser]){DATA.profilePhotos[snn]=DATA.profilePhotos[DATA.currentUser];delete DATA.profilePhotos[DATA.currentUser];}
+      DATA.recipes.forEach(r=>{if(r.author===DATA.currentUser)r.author=snn;});
+      Object.keys(DATA.likes).forEach(rid=>{const idx=(DATA.likes[rid]||[]).indexOf(DATA.currentUser);if(idx>-1)DATA.likes[rid][idx]=snn;});
+      if(DATA.favs[DATA.currentUser]){DATA.favs[snn]=DATA.favs[DATA.currentUser];delete DATA.favs[DATA.currentUser];}
+      if(DATA.follows[DATA.currentUser]){DATA.follows[snn]=DATA.follows[DATA.currentUser];delete DATA.follows[DATA.currentUser];}
+      Object.keys(DATA.follows).forEach(f=>{const idx=(DATA.follows[f]||[]).indexOf(DATA.currentUser);if(idx>-1)DATA.follows[f][idx]=snn;});
+      if(DATA.activeUsers[DATA.currentUser]){DATA.activeUsers[snn]=DATA.activeUsers[DATA.currentUser];delete DATA.activeUsers[DATA.currentUser];}
+      DATA.users[snn]={...(DATA.users[DATA.currentUser]||{}),name:snn,bio:snb};delete DATA.users[DATA.currentUser];
+      DATA.currentUser=snn;
+    }else{DATA.users[DATA.currentUser].bio=snb;}
+    saveData();document.getElementById('editProfileModal').style.display='none';
+    updateUI();renderContent();showToast('✅ Profil güncellendi');
+  });
+
+  // Admin
+  document.getElementById('adminClearAll').addEventListener('click',()=>{if(confirm('⚠️ TÜM tarifler silinecek!')){DATA.recipes=[];saveData();updateTabBar();renderContent();updateAdminStats();showToast('🗑️ Silindi');}});
+
+  // Global API
+  window.APP={openProfile,openDetail,openVideoDetail,toggleLike,toggleFav,deletePost,editPost,followUser,isFollowing};
+
+  function init(){
+    loadData();
+    if(DATA.currentUser&&DATA.users[DATA.currentUser]){showMainScreen();updateUI();updateTabBar();renderContent();DATA.activeUsers[DATA.currentUser]=Date.now();saveData();}
+    else{DATA.currentUser=null;showWelcomeScreen();}
+    setInterval(()=>{const now=Date.now();let c=false;for(const[u,t]of Object.entries(DATA.activeUsers||{})){if(now-t>300000){delete DATA.activeUsers[u];c=true;}}if(c)saveData();},60000);
+  }
+  init();
+  console.log('✅ Lezzet Bulutu - Ultimate Sürüm hazır!');
+  console.log('👨‍💻 Yapımcı: Faruk Tn');
+  console.log('🔑 Özel Admin: FarukTn / FarukTn47-21F');
+  console.log('👥 Takip sistemi, bildirimler, Google Ads entegrasyonu aktif');
+})();
+</script>
+</body>
+</html>
